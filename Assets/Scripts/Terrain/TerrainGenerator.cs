@@ -63,6 +63,7 @@ public class TerrainGenerator : MonoBehaviour
     public bool autoUpdate;
 
     public TerrainType[] regions;
+    public float meshHeightMultiplier;
 
     public void GenerateTerrain()
     {
@@ -95,7 +96,7 @@ public class TerrainGenerator : MonoBehaviour
             display.DrawTexture(TextureGenarator.TextureFromColorMap(colorMap, mapWidth, mapHeight));
         } else if (drawMode == DrawMode.Mesh)
         {
-            display.DrawMesh(MeshGenerator.GenerateTerrainMesh(noiseMap), TextureGenarator.TextureFromColorMap(colorMap, mapWidth, mapHeight));
+            display.DrawMesh(MeshGenerator.GenerateTerrainMesh(noiseMap, meshHeightMultiplier), TextureGenarator.TextureFromColorMap(colorMap, mapWidth, mapHeight));
         }
         
     }
