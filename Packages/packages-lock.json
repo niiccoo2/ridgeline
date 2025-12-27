@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.hestia.hackatime": {
+      "version": "https://github.com/unsaltedkale/unity-hackatime.git?path=/Assets/com.hestia.hackatime",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "dbf2978b89f2453586af65b892198e3c9f6615d4"
+    },
     "com.unity.ai.navigation": {
       "version": "2.0.8",
       "depth": 0,
@@ -195,13 +202,6 @@
         "com.unity.modules.jsonserialize": "1.0.0"
       },
       "url": "https://packages.unity.com"
-    },
-    "com.vanbassum.wakatime": {
-      "version": "https://github.com/vanBassum/Wakatime.Unity.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "37a618a46cf33a9bce760c90eecf4bf2a3c9664a"
     },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",
