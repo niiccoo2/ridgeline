@@ -65,6 +65,11 @@ public class TerrainGenerator : MonoBehaviour
     public TerrainType[] regions;
     public float meshHeightMultiplier;
 
+    void Start()
+    {
+        GenerateTerrain();
+    }
+
     public void GenerateTerrain()
     {
         float[,] noiseMap = Noise.GenerateNoiseMap(mapWidth, mapHeight, seed, noiseScale, octaves, persistance, lacunarity, offset);
