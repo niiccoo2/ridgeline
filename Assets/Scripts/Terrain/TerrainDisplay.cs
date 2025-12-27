@@ -1,4 +1,4 @@
-using Unity.Mathematics;
+// using Unity.Mathematics;
 using UnityEngine;
 
 public class TerrainDisplay : MonoBehaviour
@@ -6,6 +6,7 @@ public class TerrainDisplay : MonoBehaviour
     public Renderer textureRender;
     public MeshFilter meshFilter;
     public MeshRenderer meshRenderer;
+    public MeshCollider meshCollider;
 
     public void DrawTexture(Texture2D texture)
     {
@@ -15,7 +16,9 @@ public class TerrainDisplay : MonoBehaviour
 
     public void DrawMesh(MeshData meshData, Texture2D texture)
     {
-        meshFilter.sharedMesh = meshData.CreateMesh();
+        Mesh mesh = meshData.CreateMesh();
+        meshFilter.sharedMesh = mesh;
+        meshCollider.sharedMesh = mesh;
         meshRenderer.sharedMaterial.mainTexture = texture;
     }
 }
