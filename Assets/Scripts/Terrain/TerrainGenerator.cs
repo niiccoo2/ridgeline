@@ -93,11 +93,10 @@ public class TerrainGenerator : MonoBehaviour
         } else if (drawMode == DrawMode.ColorMap)
         {
             display.DrawTexture(TextureGenarator.TextureFromColorMap(colorMap, mapWidth, mapHeight));
+        } else if (drawMode == DrawMode.Mesh)
+        {
+            display.DrawMesh(MeshGenerator.GenerateTerrainMesh(noiseMap), TextureGenarator.TextureFromColorMap(colorMap, mapWidth, mapHeight));
         }
-        // } else if (drawMode == DrawMode.Mesh)
-        // {
-        //     display.DrawMesh(MeshGenerator.GenerateTerrainMesh(noiseMap), );
-        // }
         
     }
 
