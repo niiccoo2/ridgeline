@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 
 // public class TerrainGenerator : MonoBehaviour
@@ -65,13 +66,15 @@ public class TerrainGenerator : MonoBehaviour
     public TerrainType[] regions;
     public float meshHeightMultiplier;
 
-    void Start()
-    {
+    public GameObject treePrefab;
+
+    private GameObject treeContainer;
+
+    void Start() {
         GenerateTerrain();
     }
 
-    public void GenerateTerrain()
-    {
+    public void GenerateTerrain() {
         float[,] noiseMap = Noise.GenerateNoiseMap(mapWidth, mapHeight, seed, noiseScale, octaves, persistance, lacunarity, offset);
 
         Color[] colorMap = new Color[mapWidth * mapHeight];
@@ -93,17 +96,54 @@ public class TerrainGenerator : MonoBehaviour
         }
 
         TerrainDisplay display = FindAnyObjectByType<TerrainDisplay>();
-        if (drawMode == DrawMode.NoiseMap)
-        {
+        if (drawMode == DrawMode.NoiseMap) {
             display.DrawTexture(TextureGenarator.TextureFromHeightMap(noiseMap));
-        } else if (drawMode == DrawMode.ColorMap)
-        {
+        } else if (drawMode == DrawMode.ColorMap) {
             display.DrawTexture(TextureGenarator.TextureFromColorMap(colorMap, mapWidth, mapHeight));
-        } else if (drawMode == DrawMode.Mesh)
-        {
+        } else if (drawMode == DrawMode.Mesh) {
             display.DrawMesh(MeshGenerator.GenerateTerrainMesh(noiseMap, meshHeightMultiplier), TextureGenarator.TextureFromColorMap(colorMap, mapWidth, mapHeight));
+            SpawnTrees(noiseMap, meshHeightMultiplier, seed, treePrefab);
         }
         
+    }
+
+    void SpawnTrees(float[,] noiseMap, float heightMultiplier, int seed, GameObject treePrefab) {
+        int width = noiseMap.GetLength(0);
+        int height = noiseMap.GetLength(1);
+
+        System.Random prng = new System.Random(seed);
+
+        if (treeContainer == null) {
+            treeContainer = GameObject.Find("TreeContainer");
+            if (treeContainer == null) {
+                treeContainer = new GameObject("TreeContainer");
+            }
+        }
+
+        var children = new List<Transform>();
+        foreach (Transform child in treeContainer.transform) {
+            children.Add(child);
+        }
+        foreach (Transform child in children) {
+            DestroyImmediate(child.gameObject);
+        }
+
+        for (int x = 0; x < width; x++) {
+            for (int z = 0; z < height; z++) { // z is 2d y
+                float y = noiseMap[x, z] * heightMultiplier;
+                
+                if (prng.Next(100) < 19) { // 4 is 5% bc 0 math
+                    float spawnX = 10*((width-1)/-2f + x);
+                    float spawnZ = 10*((height-1)/2f - z);
+
+                    Vector3 spawnPosition = new Vector3(spawnX, y, spawnZ);
+
+                    Quaternion spawnRotation = Quaternion.Euler(-90, prng.Next(0,360), 0);
+                    var tree = Instantiate(treePrefab, spawnPosition, spawnRotation);
+                    tree.transform.parent = treeContainer.transform;
+                } 
+            }
+        }
     }
 
     void OnValidate()
