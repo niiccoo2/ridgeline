@@ -128,13 +128,17 @@ public class TerrainGenerator : MonoBehaviour
             DestroyImmediate(child.gameObject);
         }
 
-        for (int x = 0; x < width; x++) {
-            for (int z = 0; z < height; z++) { // z is 2d y
-                float y = noiseMap[x, z] * heightMultiplier;
+        int subCords = 4;
+        int scale = 10;
+
+        for (int x = 0; x < width*subCords; x++) {
+            for (int z = 0; z < height*subCords; z++) { // z is 2d y
+                float y = noiseMap[x / subCords, z / subCords] * heightMultiplier;
                 
-                if (prng.Next(100) < 19) { // 4 is 5% bc 0 math
-                    float spawnX = 10*((width-1)/-2f + x);
-                    float spawnZ = 10*((height-1)/2f - z);
+                if (prng.Next(100) < 4) { // 4 is 5% bc 0 math
+                // if (true) {
+                    float spawnX = ((float)x / (width * subCords - 1) - 0.5f) * width * scale;
+                    float spawnZ = ((float)z / (height * subCords - 1) - 0.5f) * height * scale;
 
                     Vector3 spawnPosition = new Vector3(spawnX, y, spawnZ);
 
