@@ -137,8 +137,10 @@ public class TerrainGenerator : MonoBehaviour
                 
                 if (prng.Next(100) < 4) { // 4 is 5% bc 0 math
                 // if (true) {
-                    float spawnX = ((float)x / (width * subCords - 1) - 0.5f) * width * scale;
-                    float spawnZ = ((float)z / (height * subCords - 1) - 0.5f) * height * scale;
+                    float meshTopLeftX = (width - 1) / -2f;
+                    float meshTopLeftZ = (height - 1) / 2f;
+                    float spawnX = (meshTopLeftX + ((float)x / subCords)) * scale;
+                    float spawnZ = (meshTopLeftZ - ((float)z / subCords)) * scale;
 
                     Vector3 spawnPosition = new Vector3(spawnX, y, spawnZ);
 
