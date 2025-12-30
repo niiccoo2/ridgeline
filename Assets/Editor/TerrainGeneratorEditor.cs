@@ -5,21 +5,21 @@ using UnityEditor;
 [CanEditMultipleObjects]
 public class TerrainGeneratorEditor : Editor
 {
-    public override void OnInspectorGUI()
-    {
-        TerrainGenerator terGen = (TerrainGenerator)target;
+    // public override void OnInspectorGUI()
+    // {
+    //     TerrainGenerator terGen = (TerrainGenerator)target;
 
-        if (DrawDefaultInspector())
-        {
-            if (terGen.autoUpdate)
-            {
-                terGen.GenerateTerrain();
-            }
-        }
+    //     if (DrawDefaultInspector())
+    //     {
+    //         if (terGen.autoUpdate)
+    //         {
+    //             terGen.GenerateTerrain();
+    //         }
+    //     }
 
-        if (GUILayout.Button("Generate"))
-        {
-            terGen.GenerateTerrain();
-        }
-    }
+    //     if (GUILayout.Button("Generate"))
+    //     {
+    //         terGen.GenerateTerrain();
+    //     }
+    // }
 }

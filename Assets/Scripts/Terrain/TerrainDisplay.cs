@@ -3,18 +3,14 @@ using UnityEngine;
 
 public class TerrainDisplay : MonoBehaviour
 {
-    public Renderer textureRender;
-    public MeshFilter meshFilter;
-    public MeshRenderer meshRenderer;
-    public MeshCollider meshCollider;
 
-    public void DrawTexture(Texture2D texture)
+    public void DrawTexture(Texture2D texture, Renderer textureRenderer)
     {
-        textureRender.sharedMaterial.mainTexture = texture;
-        textureRender.transform.localScale = new Vector3(texture.width, 1, texture.height);
+        textureRenderer.sharedMaterial.mainTexture = texture;
+        textureRenderer.transform.localScale = new Vector3(texture.width, 1, texture.height);
     }
 
-    public void DrawMesh(MeshData meshData, Texture2D texture)
+    public void DrawMesh(MeshData meshData, Texture2D texture, MeshFilter meshFilter, MeshRenderer meshRenderer, MeshCollider meshCollider)
     {
         Mesh mesh = meshData.CreateMesh();
         meshFilter.sharedMesh = mesh;

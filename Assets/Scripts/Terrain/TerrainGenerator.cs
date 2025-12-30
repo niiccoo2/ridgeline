@@ -1,7 +1,5 @@
 using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 
 // public class TerrainGenerator : MonoBehaviour
 // {
@@ -49,6 +47,7 @@ using System.Diagnostics.Contracts;
 
 public class TerrainGenerator : MonoBehaviour
 {
+
     public enum DrawMode {NoiseMap, ColorMap, Mesh};
     public DrawMode drawMode;
     public int mapWidth;
@@ -59,7 +58,7 @@ public class TerrainGenerator : MonoBehaviour
     public float persistance;
     public float lacunarity;
     public int seed;
-    public Vector2 offset;
+    // public Vector2 offset;
 
     public bool autoUpdate;
 
@@ -70,11 +69,11 @@ public class TerrainGenerator : MonoBehaviour
 
     private GameObject treeContainer;
 
-    void Start() {
-        GenerateTerrain();
-    }
+    // void Start() {
+    //     GenerateTerrain();
+    // }
 
-    public void GenerateTerrain() {
+    public void GenerateTerrain(Vector2 offset, Renderer textureRenderer, MeshFilter meshFilter, MeshRenderer meshRenderer, MeshCollider meshCollider) {
         float[,] noiseMap = Noise.GenerateNoiseMap(mapWidth, mapHeight, seed, noiseScale, octaves, persistance, lacunarity, offset);
 
         Color[] colorMap = new Color[mapWidth * mapHeight];
@@ -97,12 +96,12 @@ public class TerrainGenerator : MonoBehaviour
 
         TerrainDisplay display = FindAnyObjectByType<TerrainDisplay>();
         if (drawMode == DrawMode.NoiseMap) {
-            display.DrawTexture(TextureGenarator.TextureFromHeightMap(noiseMap));
+            display.DrawTexture(TextureGenarator.TextureFromHeightMap(noiseMap), textureRenderer);
         } else if (drawMode == DrawMode.ColorMap) {
-            display.DrawTexture(TextureGenarator.TextureFromColorMap(colorMap, mapWidth, mapHeight));
+            display.DrawTexture(TextureGenarator.TextureFromColorMap(colorMap, mapWidth, mapHeight), textureRenderer);
         } else if (drawMode == DrawMode.Mesh) {
-            display.DrawMesh(MeshGenerator.GenerateTerrainMesh(noiseMap, meshHeightMultiplier), TextureGenarator.TextureFromColorMap(colorMap, mapWidth, mapHeight));
-            SpawnTrees(noiseMap, meshHeightMultiplier, seed, treePrefab);
+            display.DrawMesh(MeshGenerator.GenerateTerrainMesh(noiseMap, meshHeightMultiplier, offset), TextureGenarator.TextureFromColorMap(colorMap, mapWidth, mapHeight), meshFilter, meshRenderer, meshCollider);
+            // SpawnTrees(noiseMap, meshHeightMultiplier, seed, treePrefab);
         }
         
     }
