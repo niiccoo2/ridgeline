@@ -18,6 +18,12 @@ Wrote a lot of logic to spawn trees. Then made it so it can be at a higher densi
 
 Got the trees to spawn in the right spots, but the height is off for some reason, will look into ts tmrw morning.
 
+### Tuesday, December 30th | x hours
+
+#### 16:30 | 0 hours
+
+Goal today is to write my own chunking system AND NOT USE ANY CLANKERS. To do this I am going to start by making the game take multiple meshes and renderthem together as multiple chunks. Then make it only active (i think thats the term) the chunks < x blocks from player.
+
 ## Credits
 
 `"Low Poly Pine Tree" (https://skfb.ly/6WYVr) by skaljowsky is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).`
