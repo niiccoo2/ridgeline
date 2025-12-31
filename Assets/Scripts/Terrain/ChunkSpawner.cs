@@ -31,8 +31,8 @@ public class ChunkSpawner : MonoBehaviour
 
         GameObject thisChunk = new GameObject("chunk_" + x + "_" + y);
         thisChunk.transform.parent = chunks.transform;
-        
-        
+        thisChunk.transform.position = new Vector3(x, 0f, y);
+
         MeshFilter meshFilter = thisChunk.AddComponent<MeshFilter>();
         MeshRenderer meshRenderer = thisChunk.AddComponent<MeshRenderer>();
         MeshCollider meshCollider = thisChunk.AddComponent<MeshCollider>();
@@ -57,8 +57,8 @@ public class ChunkSpawner : MonoBehaviour
         {
             for (int y = 0; y < height/chunkSize; y++)
             {
-                int realX = x*chunkSize;
-                int realY = y*chunkSize;
+                int realX = x*(chunkSize-1);
+                int realY = y*(chunkSize-1);
 
                 SpawnChunk(realX, realY);
             }

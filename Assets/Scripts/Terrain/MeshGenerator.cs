@@ -1,28 +1,40 @@
 using UnityEngine;
 
-public class MeshGenerator
+public static class MeshGenerator
 {
-    public static MeshData GenerateTerrainMesh(float[,] heightMap, float heightMultiplier, Vector2 offset)
+    public static MeshData GenerateTerrainMesh(float[,] heightMap, float heightMultiplier)
     {
         int width = heightMap.GetLength(0);
         int height = heightMap.GetLength(1);
-        float topLeftX = (width-1)/-2f + offset[0];
-        float topLeftZ = (height-1)/2f + offset[1];
 
         MeshData meshData = new MeshData(width, height);
         int vertexIndex = 0;
 
-        for (int y = 0; y < height; y++)
+        for (int z = 0; z < height; z++)
         {
             for (int x = 0; x < width; x++)
             {
-                meshData.vertices[vertexIndex] = new Vector3(topLeftX + x, heightMap[x, y] * heightMultiplier, topLeftZ - y);
-                meshData.uvs[vertexIndex] = new Vector2(x/(float)width, y/(float)height);
+                // LOCAL SPACE VERTICES (corner-anchored)
+                meshData.vertices[vertexIndex] = new Vector3(
+                    x,
+                    heightMap[x, z] * heightMultiplier,
+                    z
+                );
 
-                if (x < width-1 && y < height -1)
+                // CORRECT UVs (full 0–1 range, not squashed)
+                meshData.uvs[vertexIndex] = new Vector2(
+                    x / (float)(width - 1),
+                    z / (float)(height - 1)
+                );
+
+                // TRIANGLES
+                if (x < width - 1 && z < height - 1)
                 {
-                    meshData.AddTriangle(vertexIndex, vertexIndex + width + 1, vertexIndex + width);
-                    meshData.AddTriangle(vertexIndex + width + 1, vertexIndex, vertexIndex + 1);
+                    // First triangle - counter-clockwise from above
+                    meshData.AddTriangle(vertexIndex, vertexIndex + width, vertexIndex + width + 1);
+                    
+                    // Second triangle - counter-clockwise from above
+                    meshData.AddTriangle(vertexIndex, vertexIndex + width + 1, vertexIndex + 1);
                 }
 
                 vertexIndex++;
@@ -41,24 +53,24 @@ public class MeshData
 
     int triangleIndex;
 
-    public MeshData(int meshWidth, int meshHeight)
+    public MeshData(int width, int height)
     {
-        vertices = new Vector3[meshWidth * meshHeight];
-        uvs = new Vector2[meshWidth*meshHeight];
-        triangles = new int[(meshWidth-1)*(meshHeight-1)*6];
+        vertices = new Vector3[width * height];
+        uvs = new Vector2[width * height];
+        triangles = new int[(width - 1) * (height - 1) * 6];
     }
 
     public void AddTriangle(int a, int b, int c)
     {
-        triangles[triangleIndex] = a;
-        triangles[triangleIndex+1] = b;
-        triangles[triangleIndex+2] = c;
-        triangleIndex += 3;
+        triangles[triangleIndex++] = a;
+        triangles[triangleIndex++] = b;
+        triangles[triangleIndex++] = c;
     }
 
     public Mesh CreateMesh()
     {
-        Mesh mesh = new Mesh ();
+        Mesh mesh = new Mesh();
+        mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
         mesh.vertices = vertices;
         mesh.triangles = triangles;
         mesh.uv = uvs;

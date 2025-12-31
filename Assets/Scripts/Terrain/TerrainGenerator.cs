@@ -56,7 +56,14 @@ public class TerrainGenerator : MonoBehaviour
         } else if (drawMode == DrawMode.ColorMap) {
             display.DrawTexture(TextureGenarator.TextureFromColorMap(colorMap, mapWidth, mapHeight), textureRenderer);
         } else if (drawMode == DrawMode.Mesh) {
-            display.DrawMesh(MeshGenerator.GenerateTerrainMesh(noiseMap, meshHeightMultiplier, offset), TextureGenarator.TextureFromColorMap(colorMap, mapWidth, mapHeight), meshFilter, meshRenderer, meshCollider);
+            display.DrawMesh(
+                MeshGenerator.GenerateTerrainMesh(noiseMap, meshHeightMultiplier),
+                TextureGenarator.TextureFromColorMap(colorMap, mapWidth, mapHeight),
+                meshFilter,
+                meshRenderer,
+                meshCollider
+            );
+
             // SpawnTrees(noiseMap, meshHeightMultiplier, seed, treePrefab);
         }
         
