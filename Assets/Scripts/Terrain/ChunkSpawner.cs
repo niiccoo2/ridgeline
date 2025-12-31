@@ -16,11 +16,20 @@ public class ChunkSpawner : MonoBehaviour
 
     private GameObject chunks;
 
-    void Start() {
+    private Vector2[] globalOctaveOffsets;
+
+    void OnEnable() {
         if (terrain == null) {
             terrain = GameObject.Find("TerrainManager").GetComponent<TerrainGenerator>();
         }
-        chunks = new GameObject("chunks");
+        if (chunks == null) {
+            chunks = new GameObject("chunks");
+        }
+
+        // Generate global octave offsets once
+        if (globalOctaveOffsets == null) {
+            globalOctaveOffsets = Noise.GenerateGlobalOctaveOffsets(terrain.seed, terrain.octaves);
+        }
     }
 
     public void SpawnChunk(int x, int y)
@@ -31,7 +40,7 @@ public class ChunkSpawner : MonoBehaviour
 
         GameObject thisChunk = new GameObject("chunk_" + x + "_" + y);
         thisChunk.transform.parent = chunks.transform;
-        thisChunk.transform.position = new Vector3(x, 0f, y);
+        thisChunk.transform.position = new Vector3(x, 0, y); // Set position to connect chunks
 
         MeshFilter meshFilter = thisChunk.AddComponent<MeshFilter>();
         MeshRenderer meshRenderer = thisChunk.AddComponent<MeshRenderer>();
@@ -39,7 +48,13 @@ public class ChunkSpawner : MonoBehaviour
 
         terrain.regions = regions;
         
-        terrain.GenerateTerrain(new Vector2(x, y), meshRenderer, meshFilter, meshRenderer, meshCollider);
+        // Ensure globalOctaveOffsets is up-to-date
+        if (globalOctaveOffsets == null || globalOctaveOffsets.Length != terrain.octaves)
+        {
+            globalOctaveOffsets = Noise.GenerateGlobalOctaveOffsets(terrain.seed, terrain.octaves);
+        }
+
+        terrain.GenerateTerrain(new Vector2(x, y), meshRenderer, meshFilter, meshRenderer, meshCollider, globalOctaveOffsets);
     }
 
     public void SpawnAllChunks(int width, int height, int chunkSize)

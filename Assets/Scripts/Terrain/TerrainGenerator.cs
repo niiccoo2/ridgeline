@@ -29,8 +29,8 @@ public class TerrainGenerator : MonoBehaviour
     //     GenerateTerrain();
     // }
 
-    public void GenerateTerrain(Vector2 offset, Renderer textureRenderer, MeshFilter meshFilter, MeshRenderer meshRenderer, MeshCollider meshCollider) {
-        float[,] noiseMap = Noise.GenerateNoiseMap(mapWidth, mapHeight, seed, noiseScale, octaves, persistance, lacunarity, offset);
+    public void GenerateTerrain(Vector2 offset, Renderer textureRenderer, MeshFilter meshFilter, MeshRenderer meshRenderer, MeshCollider meshCollider, Vector2[] globalOctaveOffsets) {
+        float[,] noiseMap = Noise.GenerateNoiseMap(mapWidth, mapHeight, seed, noiseScale, octaves, persistance, lacunarity, offset, globalOctaveOffsets);
 
         Color[] colorMap = new Color[mapWidth * mapHeight];
 
@@ -56,17 +56,8 @@ public class TerrainGenerator : MonoBehaviour
         } else if (drawMode == DrawMode.ColorMap) {
             display.DrawTexture(TextureGenarator.TextureFromColorMap(colorMap, mapWidth, mapHeight), textureRenderer);
         } else if (drawMode == DrawMode.Mesh) {
-            display.DrawMesh(
-                MeshGenerator.GenerateTerrainMesh(noiseMap, meshHeightMultiplier),
-                TextureGenarator.TextureFromColorMap(colorMap, mapWidth, mapHeight),
-                meshFilter,
-                meshRenderer,
-                meshCollider
-            );
-
-            // SpawnTrees(noiseMap, meshHeightMultiplier, seed, treePrefab);
+            display.DrawMesh(MeshGenerator.GenerateTerrainMesh(noiseMap, meshHeightMultiplier), TextureGenarator.TextureFromColorMap(colorMap, mapWidth, mapHeight), meshFilter, meshRenderer, meshCollider);
         }
-        
     }
 
     void SpawnTrees(float[,] noiseMap, float heightMultiplier, int seed, GameObject treePrefab) {
@@ -90,7 +81,7 @@ public class TerrainGenerator : MonoBehaviour
             DestroyImmediate(child.gameObject);
         }
 
-        int subCords = 4;
+        int subCords = 1;
         int scale = 10;
 
         for (int x = 0; x < width*subCords; x++) {

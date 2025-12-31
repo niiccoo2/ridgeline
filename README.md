@@ -28,11 +28,13 @@ Goal today is to write my own chunking system AND NOT USE ANY CLANKERS. To do th
 
 Started working on the chunking logic. Got to testing placing single chunks and its not working but im getting errors so not gonna be too hard to fix I hope. Will fix after dinner.
 
-#### 20:00 | x hours
+#### 20:00 | 2.5 hours
 
 ![Working mesh](/readme_photos/working_mesh.png)
 
 Got the chunking thing working a bit, now I need to write a function that takes the total map size and draws the meshes for it...
+
+They are all aligned but have a weird y axis spacing diffrence issue, hopefully can fix in morning...
 
 ## Credits
 
