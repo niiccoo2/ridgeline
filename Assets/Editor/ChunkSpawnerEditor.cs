@@ -16,9 +16,14 @@ public class ChunkSpawnerEditor : Editor
             spawner.SpawnChunk(spawner.testX, spawner.testY);
         }
 
-        if (GUILayout.Button("Destroy all children"))
+        if (GUILayout.Button("Destroy all chunks"))
         {
             spawner.DestroyAllChunks();
+        }
+
+        if (GUILayout.Button("Spawn all chunks"))
+        {
+            spawner.SpawnAllChunks(spawner.fullMapHeight, spawner.fullMapWidth, spawner.chunkSize);
         }
     }
 }

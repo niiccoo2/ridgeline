@@ -9,7 +9,10 @@ public class ChunkSpawner : MonoBehaviour
     public TerrainType[] regions;
     public int testX;
     public int testY;
-    TerrainGenerator.DrawMode drawMode = TerrainGenerator.DrawMode.Mesh;
+
+    public int fullMapWidth;
+    public int fullMapHeight;
+    public int chunkSize;
 
     private GameObject chunks;
 
@@ -28,8 +31,8 @@ public class ChunkSpawner : MonoBehaviour
 
         GameObject thisChunk = new GameObject("chunk_" + x + "_" + y);
         thisChunk.transform.parent = chunks.transform;
-
-        // Renderer textureRenderer = thisChunk.AddComponent<Renderer>();
+        
+        
         MeshFilter meshFilter = thisChunk.AddComponent<MeshFilter>();
         MeshRenderer meshRenderer = thisChunk.AddComponent<MeshRenderer>();
         MeshCollider meshCollider = thisChunk.AddComponent<MeshCollider>();
@@ -37,6 +40,29 @@ public class ChunkSpawner : MonoBehaviour
         terrain.regions = regions;
         
         terrain.GenerateTerrain(new Vector2(x, y), meshRenderer, meshFilter, meshRenderer, meshCollider);
+    }
+
+    public void SpawnAllChunks(int width, int height, int chunkSize)
+    {
+        if (chunks == null) {
+            chunks = new GameObject("chunks"); // Create if not exists
+        }
+
+        DestroyAllChunks();
+
+        terrain.mapWidth = chunkSize;
+        terrain.mapHeight = chunkSize;
+
+        for (int x = 0; x < width/chunkSize; x++)
+        {
+            for (int y = 0; y < height/chunkSize; y++)
+            {
+                int realX = x*chunkSize;
+                int realY = y*chunkSize;
+
+                SpawnChunk(realX, realY);
+            }
+        }
     }
 
     public void DestroyAllChunks()
