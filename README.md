@@ -28,6 +28,12 @@ Goal today is to write my own chunking system AND NOT USE ANY CLANKERS. To do th
 
 Started working on the chunking logic. Got to testing placing single chunks and its not working but im getting errors so not gonna be too hard to fix I hope. Will fix after dinner.
 
+#### 20:00 | x hours
+
+![Working mesh](/readme_photos/working_mesh.png)
+
+Got the chunking thing working a bit, now I need to write a function that takes the total map size and draws the meshes for it...
+
 ## Credits
 
 `"Low Poly Pine Tree" (https://skfb.ly/6WYVr) by skaljowsky is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).`

@@ -15,5 +15,10 @@ public class ChunkSpawnerEditor : Editor
         {
             spawner.SpawnChunk(spawner.testX, spawner.testY);
         }
+
+        if (GUILayout.Button("Destroy all children"))
+        {
+            spawner.DestroyAllChunks();
+        }
     }
 }
