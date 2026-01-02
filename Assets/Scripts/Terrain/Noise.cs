@@ -7,7 +7,7 @@ public static class Noise
     
     public static float[,] GenerateNoiseMap(
         int mapWidth, int mapHeight, int seed, float scale, int octaves, 
-        float persistance, float lacunarity, Vector2 offset, Vector2[] globalOctaveOffsets)
+        float persistance, float lacunarity, Vector2 offset)
     {
         float[,] noiseMap = new float[mapWidth,mapHeight];
 
@@ -22,9 +22,14 @@ public static class Noise
         float halfWidth = mapWidth / 2f;
         float halfHeight = mapHeight / 2f;
 
-        if (globalOctaveOffsets == null || globalOctaveOffsets.Length < octaves)
+        System.Random prng = new System.Random(seed);
+        Vector2[] octaveOffsets = new Vector2[octaves];
+
+        for (int i = 0; i < octaves; i++)
         {
-            throw new System.ArgumentException("globalOctaveOffsets array must have at least 'octaves' elements.");
+            float offsetX = prng.Next(-100000, 100000);
+            float offsetY = prng.Next(-100000, 100000);
+            octaveOffsets[i] = new Vector2(offsetX, offsetY);
         }
 
         for (int y = 0; y < mapHeight; y++)
@@ -37,12 +42,10 @@ public static class Noise
 
                 for (int i = 0; i < octaves; i++)
                 {
-                    float sampleX = (x - halfWidth) / scale * frequency + globalOctaveOffsets[i].x + offset.x / scale;
-                    float sampleY = (y - halfHeight) / scale * frequency + globalOctaveOffsets[i].y + offset.y / scale;
+                    float sampleX = (x - halfWidth) / scale * frequency + octaveOffsets[i].x + offset.x / scale;
+                    float sampleY = (y - halfHeight) / scale * frequency + octaveOffsets[i].y + offset.y / scale;
 
                     float perlinValue = Mathf.PerlinNoise(sampleX, sampleY) * 2f - 1f;
-                    // float perlinValue = Mathf.Sin(sampleX) + Mathf.Cos(sampleY);
-                    // float perlinValue = 1f;
 
                     noiseHeight += perlinValue * amplitude;
 
@@ -62,29 +65,15 @@ public static class Noise
             }
         }
 
-        for (int y = 0; y < mapHeight; y++)
-        {
-            for (int x = 0; x < mapWidth; x++)
-            {
-                // noiseMap[x, y] = Mathf.InverseLerp(minNoiseHeight, maxNoiseHeight, noiseMap[x, y]);
-            }
-        }
+        // This normalizes the chunk heights but makes it so that the chunks don't match up due to diffrent max heights
+        // for (int y = 0; y < mapHeight; y++)
+        // {
+        //     for (int x = 0; x < mapWidth; x++)
+        //     {
+        //         noiseMap[x, y] = Mathf.InverseLerp(minNoiseHeight, maxNoiseHeight, noiseMap[x, y]);
+        //     }
+        // }
 
         return noiseMap;
-    }
-
-    public static Vector2[] GenerateGlobalOctaveOffsets(int seed, int octaves)
-    {
-        System.Random prng = new System.Random(seed);
-        Vector2[] octaveOffsets = new Vector2[octaves];
-
-        for (int i = 0; i < octaves; i++)
-        {
-            float offsetX = prng.Next(-100000, 100000);
-            float offsetY = prng.Next(-100000, 100000);
-            octaveOffsets[i] = new Vector2(offsetX, offsetY);
-        }
-
-        return octaveOffsets;
     }
 }

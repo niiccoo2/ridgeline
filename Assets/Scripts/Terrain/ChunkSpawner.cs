@@ -16,19 +16,12 @@ public class ChunkSpawner : MonoBehaviour
 
     private GameObject chunks;
 
-    private Vector2[] globalOctaveOffsets;
-
     void OnEnable() {
         if (terrain == null) {
             terrain = GameObject.Find("TerrainManager").GetComponent<TerrainGenerator>();
         }
         if (chunks == null) {
             chunks = new GameObject("chunks");
-        }
-
-        // Generate global octave offsets once
-        if (globalOctaveOffsets == null) {
-            globalOctaveOffsets = Noise.GenerateGlobalOctaveOffsets(terrain.seed, terrain.octaves);
         }
     }
 
@@ -47,14 +40,8 @@ public class ChunkSpawner : MonoBehaviour
         MeshCollider meshCollider = thisChunk.AddComponent<MeshCollider>();
 
         terrain.regions = regions;
-        
-        // Ensure globalOctaveOffsets is up-to-date
-        if (globalOctaveOffsets == null || globalOctaveOffsets.Length != terrain.octaves)
-        {
-            globalOctaveOffsets = Noise.GenerateGlobalOctaveOffsets(terrain.seed, terrain.octaves);
-        }
 
-        terrain.GenerateTerrain(new Vector2(x, y), meshRenderer, meshFilter, meshRenderer, meshCollider, globalOctaveOffsets);
+        terrain.GenerateTerrain(new Vector2(x, y), meshRenderer, meshFilter, meshRenderer, meshCollider);
     }
 
     public void SpawnAllChunks(int width, int height, int chunkSize)

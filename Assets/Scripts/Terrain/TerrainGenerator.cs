@@ -29,8 +29,8 @@ public class TerrainGenerator : MonoBehaviour
     //     GenerateTerrain();
     // }
 
-    public void GenerateTerrain(Vector2 offset, Renderer textureRenderer, MeshFilter meshFilter, MeshRenderer meshRenderer, MeshCollider meshCollider, Vector2[] globalOctaveOffsets) {
-        float[,] noiseMap = Noise.GenerateNoiseMap(mapWidth, mapHeight, seed, noiseScale, octaves, persistance, lacunarity, offset, globalOctaveOffsets);
+    public void GenerateTerrain(Vector2 offset, Renderer textureRenderer, MeshFilter meshFilter, MeshRenderer meshRenderer, MeshCollider meshCollider) {
+        float[,] noiseMap = Noise.GenerateNoiseMap(mapWidth, mapHeight, seed, noiseScale, octaves, persistance, lacunarity, offset);
 
         Color[] colorMap = new Color[mapWidth * mapHeight];
 
