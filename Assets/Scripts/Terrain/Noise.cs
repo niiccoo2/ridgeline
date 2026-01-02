@@ -37,12 +37,12 @@ public static class Noise
 
                 for (int i = 0; i < octaves; i++)
                 {
-                    float sampleX = ((float)x - halfWidth) / scale * frequency + globalOctaveOffsets[i].x + offset.x / scale;
-                    float sampleY = ((float)y - halfHeight) / scale * frequency + globalOctaveOffsets[i].y + offset.y / scale;
+                    float sampleX = (x - halfWidth) / scale * frequency + globalOctaveOffsets[i].x + offset.x / scale;
+                    float sampleY = (y - halfHeight) / scale * frequency + globalOctaveOffsets[i].y + offset.y / scale;
 
-                    // float perlinValue = Mathf.PerlinNoise(sampleX, sampleY) * 2f - 1f;
+                    float perlinValue = Mathf.PerlinNoise(sampleX, sampleY) * 2f - 1f;
                     // float perlinValue = Mathf.Sin(sampleX) + Mathf.Cos(sampleY);
-                    float perlinValue = 1f;
+                    // float perlinValue = 1f;
 
                     noiseHeight += perlinValue * amplitude;
 
@@ -66,7 +66,7 @@ public static class Noise
         {
             for (int x = 0; x < mapWidth; x++)
             {
-                noiseMap[x, y] = Mathf.InverseLerp(minNoiseHeight, maxNoiseHeight, noiseMap[x, y]);
+                // noiseMap[x, y] = Mathf.InverseLerp(minNoiseHeight, maxNoiseHeight, noiseMap[x, y]);
             }
         }
 
