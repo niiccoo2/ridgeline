@@ -18,7 +18,7 @@ Wrote a lot of logic to spawn trees. Then made it so it can be at a higher densi
 
 Got the trees to spawn in the right spots, but the height is off for some reason, will look into ts tmrw morning.
 
-### Tuesday, December 30th | x hours
+### Tuesday, December 30th | 5.5 hours
 
 #### 16:30 | 0 hours
 
@@ -35,6 +35,14 @@ Started working on the chunking logic. Got to testing placing single chunks and 
 Got the chunking thing working a bit, now I need to write a function that takes the total map size and draws the meshes for it...
 
 They are all aligned but have a weird y axis spacing diffrence issue, hopefully can fix in morning...
+
+### Saturday, January 10th | x hours
+
+#### 14:00 | x hours
+
+Fixed the chunk spawning issue, now time to work on the function that will only spawn chunks x units close to you.
+
+Also might change this game from a survival game to a drone sim... Need to think about it a bit...
 
 ## Credits
 
