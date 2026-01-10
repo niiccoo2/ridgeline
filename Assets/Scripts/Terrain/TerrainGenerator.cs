@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections.Generic;
 
 public class TerrainGenerator : MonoBehaviour
 {
@@ -22,8 +21,6 @@ public class TerrainGenerator : MonoBehaviour
     public float meshHeightMultiplier;
 
     public GameObject treePrefab;
-
-    private GameObject treeContainer;
 
     // void Start() {
     //     GenerateTerrain();
@@ -57,49 +54,29 @@ public class TerrainGenerator : MonoBehaviour
             display.DrawTexture(TextureGenarator.TextureFromColorMap(colorMap, mapWidth, mapHeight), textureRenderer);
         } else if (drawMode == DrawMode.Mesh) {
             display.DrawMesh(MeshGenerator.GenerateTerrainMesh(noiseMap, meshHeightMultiplier), TextureGenarator.TextureFromColorMap(colorMap, mapWidth, mapHeight), meshFilter, meshRenderer, meshCollider);
+            SpawnTrees(noiseMap, offset, seed, meshHeightMultiplier, treePrefab, meshFilter.transform);
         }
     }
 
-    void SpawnTrees(float[,] noiseMap, float heightMultiplier, int seed, GameObject treePrefab) {
+    public void SpawnTrees(float[,] noiseMap, Vector2 offset, int seed, float heightMultiplier, GameObject treePrefab, Transform chunkParent) {
         int width = noiseMap.GetLength(0);
         int height = noiseMap.GetLength(1);
 
-        System.Random prng = new System.Random(seed);
+        System.Random prng = new System.Random(seed*(int)offset[0]+(int)offset[1]);
 
-        if (treeContainer == null) {
-            treeContainer = GameObject.Find("TreeContainer");
-            if (treeContainer == null) {
-                treeContainer = new GameObject("TreeContainer");
-            }
-        }
-
-        var children = new List<Transform>();
-        foreach (Transform child in treeContainer.transform) {
-            children.Add(child);
-        }
-        foreach (Transform child in children) {
-            DestroyImmediate(child.gameObject);
-        }
-
-        int subCords = 1;
-        int scale = 10;
-
-        for (int x = 0; x < width*subCords; x++) {
-            for (int z = 0; z < height*subCords; z++) { // z is 2d y
-                float y = noiseMap[x / subCords, z / subCords] * heightMultiplier;
+        for (int x = 0; x < width; x++) {
+            for (int z = 0; z < height; z++) { // z is 2d y
+                float y = noiseMap[x, z] * heightMultiplier;
                 
                 if (prng.Next(100) < 4) { // 4 is 5% bc 0 math
-                // if (true) {
-                    float meshTopLeftX = (width - 1) / -2f;
-                    float meshTopLeftZ = (height - 1) / 2f;
-                    float spawnX = (meshTopLeftX + ((float)x / subCords)) * scale;
-                    float spawnZ = (meshTopLeftZ - ((float)z / subCords)) * scale;
+                    float spawnX = x + offset[0];
+                    float spawnZ = z + offset[1];
 
                     Vector3 spawnPosition = new Vector3(spawnX, y, spawnZ);
 
                     Quaternion spawnRotation = Quaternion.Euler(-90, prng.Next(0,360), 0);
                     var tree = Instantiate(treePrefab, spawnPosition, spawnRotation);
-                    tree.transform.parent = treeContainer.transform;
+                    tree.transform.parent = chunkParent;
                 } 
             }
         }

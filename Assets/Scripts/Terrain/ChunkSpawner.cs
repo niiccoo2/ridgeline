@@ -7,7 +7,7 @@ using UnityEngine.Rendering;
 
 public class ChunkSpawner : MonoBehaviour
 {
-    public TerrainGenerator terrain; // Removed [SerializeField] - public fields show by default
+    public TerrainGenerator terrain;
     public TerrainType[] regions;
     public int testX;
     public int testY;
@@ -49,6 +49,8 @@ public class ChunkSpawner : MonoBehaviour
         terrain.regions = regions;
 
         terrain.GenerateTerrain(new Vector2(x, y), meshRenderer, meshFilter, meshRenderer, meshCollider);
+        
+        thisChunk.SetActive(false);
     }
 
     public void SpawnAllChunks(int width, int height, int chunkSize)
@@ -89,7 +91,7 @@ public class ChunkSpawner : MonoBehaviour
     {
         MakeSureChunksExists();
 
-        Transform chunkTransform = chunks.transform.Find("chunks_" + x + "_" + y);
+        Transform chunkTransform = chunks.transform.Find("chunk_" + x + "_" + y);
         GameObject chunk;
         if (chunkTransform != null)
         {
@@ -116,7 +118,6 @@ public class ChunkSpawner : MonoBehaviour
         // Create a 2D array for all chunks
         int chunkGridWidth = fullMapWidth / chunkSize;
         int chunkGridHeight = fullMapHeight / chunkSize;
-        bool[,] allChunks = new bool[chunkGridWidth, chunkGridHeight];
 
         // Iterate over all chunks in the grid
         for (int chunkX = 0; chunkX < chunkGridWidth; chunkX++)
