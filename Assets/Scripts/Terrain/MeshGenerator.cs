@@ -14,26 +14,23 @@ public static class MeshGenerator
         {
             for (int x = 0; x < width; x++)
             {
-                // LOCAL SPACE VERTICES (corner-anchored)
+                // Scale vertex positions to span the full chunk size (0 to width, not 0 to width-1)
                 meshData.vertices[vertexIndex] = new Vector3(
-                    x,
+                    x / (float)(width - 1) * width, // This makes the mesh span from 0 to chunkSize
                     heightMap[x, z] * heightMultiplier,
-                    z
+                    z / (float)(height - 1) * height // This makes the mesh span from 0 to chunkSize
                 );
 
-                // CORRECT UVs (full 0–1 range, not squashed)
+                // Correct UVs
                 meshData.uvs[vertexIndex] = new Vector2(
                     x / (float)(width - 1),
                     z / (float)(height - 1)
                 );
 
-                // TRIANGLES
+                // Triangles
                 if (x < width - 1 && z < height - 1)
                 {
-                    // First triangle - counter-clockwise from above
                     meshData.AddTriangle(vertexIndex, vertexIndex + width, vertexIndex + width + 1);
-                    
-                    // Second triangle - counter-clockwise from above
                     meshData.AddTriangle(vertexIndex, vertexIndex + width + 1, vertexIndex + 1);
                 }
 

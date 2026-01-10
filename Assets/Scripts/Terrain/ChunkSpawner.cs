@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using GLTFast.Schema;
 using Unity.Collections;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class ChunkSpawner : MonoBehaviour
 {
@@ -25,11 +27,16 @@ public class ChunkSpawner : MonoBehaviour
         }
     }
 
-    public void SpawnChunk(int x, int y)
-    {   
+    private void MakeSureChunksExists()
+    {
         if (chunks == null) {
             chunks = new GameObject("chunks"); // Create if not exists
         }
+    }
+
+    public void SpawnChunk(int x, int y)
+    {   
+        MakeSureChunksExists();
 
         GameObject thisChunk = new GameObject("chunk_" + x + "_" + y);
         thisChunk.transform.parent = chunks.transform;
@@ -46,9 +53,7 @@ public class ChunkSpawner : MonoBehaviour
 
     public void SpawnAllChunks(int width, int height, int chunkSize)
     {
-        if (chunks == null) {
-            chunks = new GameObject("chunks"); // Create if not exists
-        }
+        MakeSureChunksExists();
 
         DestroyAllChunks();
 
@@ -59,8 +64,8 @@ public class ChunkSpawner : MonoBehaviour
         {
             for (int y = 0; y < height/chunkSize; y++)
             {
-                int realX = x*(chunkSize-1);
-                int realY = y*(chunkSize-1);
+                int realX = x * chunkSize;
+                int realY = y * chunkSize;
 
                 SpawnChunk(realX, realY);
             }
@@ -69,9 +74,7 @@ public class ChunkSpawner : MonoBehaviour
 
     public void DestroyAllChunks()
     {
-        if (chunks == null) {
-            chunks = new GameObject("chunks"); // Create if not exists
-        }
+        MakeSureChunksExists();
 
         var children = new List<Transform>();
         foreach (Transform child in chunks.transform) {
@@ -79,6 +82,60 @@ public class ChunkSpawner : MonoBehaviour
         }
         foreach (Transform child in children) {
             DestroyImmediate(child.gameObject);
+        }
+    }
+
+    private void EnableChunk(int x, int y, bool enable = true)
+    {
+        MakeSureChunksExists();
+
+        Transform chunkTransform = chunks.transform.Find("chunks_" + x + "_" + y);
+        GameObject chunk;
+        if (chunkTransform != null)
+        {
+            chunk = chunkTransform.gameObject;
+        } else
+        {
+            return;
+        }
+
+        chunk.SetActive(enable);
+    }
+
+    private void DisableChunk(int x, int y)
+    {
+        EnableChunk(x, y, false);
+    }
+
+    public void SpawnNearChunks(int x, int y, int numberOfChunks = 10)
+    {
+        // Calculate the current chunk index (not world position)
+        int currentChunkX = Mathf.FloorToInt((float)x / chunkSize);
+        int currentChunkY = Mathf.FloorToInt((float)y / chunkSize);
+
+        // Create a 2D array for all chunks
+        int chunkGridWidth = fullMapWidth / chunkSize;
+        int chunkGridHeight = fullMapHeight / chunkSize;
+        bool[,] allChunks = new bool[chunkGridWidth, chunkGridHeight];
+
+        // Iterate over all chunks in the grid
+        for (int chunkX = 0; chunkX < chunkGridWidth; chunkX++)
+        {
+            for (int chunkY = 0; chunkY < chunkGridHeight; chunkY++)
+            {
+                // Calculate the distance in chunk indices
+                int distanceX = Mathf.Abs(chunkX - currentChunkX);
+                int distanceY = Mathf.Abs(chunkY - currentChunkY);
+
+                // Mark chunks within the specified range
+                if (distanceX < numberOfChunks && distanceY < numberOfChunks)
+                {
+                    EnableChunk(chunkX * chunkSize, chunkY * chunkSize);
+                } else
+                {
+                    DisableChunk(chunkX * chunkSize, chunkY * chunkSize);
+                }
+            }
         }
     }
 }

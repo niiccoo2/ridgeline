@@ -19,9 +19,6 @@ public static class Noise
         float maxNoiseHeight = float.MinValue;
         float minNoiseHeight = float.MaxValue;
 
-        float halfWidth = mapWidth / 2f;
-        float halfHeight = mapHeight / 2f;
-
         System.Random prng = new System.Random(seed);
         Vector2[] octaveOffsets = new Vector2[octaves];
 
@@ -42,10 +39,12 @@ public static class Noise
 
                 for (int i = 0; i < octaves; i++)
                 {
-                    float sampleX = (x - halfWidth) / scale * frequency + octaveOffsets[i].x + offset.x / scale;
-                    float sampleY = (y - halfHeight) / scale * frequency + octaveOffsets[i].y + offset.y / scale;
+                    float sampleX = (x + offset.x) / scale * frequency + octaveOffsets[i].x;
+                    float sampleY = (y + offset.y) / scale * frequency + octaveOffsets[i].y;
+                    
 
-                    float perlinValue = Mathf.PerlinNoise(sampleX, sampleY) * 2f - 1f;
+                    // float perlinValue = Mathf.PerlinNoise(sampleX, sampleY) * 2f - 1f;
+                    float perlinValue = Mathf.Sin(sampleX);
 
                     noiseHeight += perlinValue * amplitude;
 

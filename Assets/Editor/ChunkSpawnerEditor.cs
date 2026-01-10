@@ -25,5 +25,10 @@ public class ChunkSpawnerEditor : Editor
         {
             spawner.SpawnAllChunks(spawner.fullMapHeight, spawner.fullMapWidth, spawner.chunkSize);
         }
+
+        if (GUILayout.Button("Spawn near chunks"))
+        {
+            spawner.SpawnNearChunks(spawner.testX, spawner.testY, 2);
+        }
     }
 }
