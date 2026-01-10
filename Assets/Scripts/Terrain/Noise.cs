@@ -39,8 +39,12 @@ public static class Noise
 
                 for (int i = 0; i < octaves; i++)
                 {
-                    float sampleX = (x + offset.x) / scale * frequency + octaveOffsets[i].x;
-                    float sampleY = (y + offset.y) / scale * frequency + octaveOffsets[i].y;
+                    // Sample at the actual vertex position to ensure chunk continuity
+                    float vertexX = x / (float)(mapWidth - 1) * mapWidth;
+                    float vertexY = y / (float)(mapHeight - 1) * mapHeight;
+                    
+                    float sampleX = (vertexX + offset.x) / scale * frequency + octaveOffsets[i].x;
+                    float sampleY = (vertexY + offset.y) / scale * frequency + octaveOffsets[i].y;
                     
 
                     // float perlinValue = Mathf.PerlinNoise(sampleX, sampleY) * 2f - 1f;
