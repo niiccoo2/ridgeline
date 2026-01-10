@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class TerrainGenerator : MonoBehaviour
@@ -21,6 +22,8 @@ public class TerrainGenerator : MonoBehaviour
     public float meshHeightMultiplier;
 
     public GameObject treePrefab;
+
+    public int minTreeDistance;
 
     // void Start() {
     //     GenerateTerrain();
@@ -64,11 +67,17 @@ public class TerrainGenerator : MonoBehaviour
 
         System.Random prng = new System.Random(seed*(int)offset[0]+(int)offset[1]);
 
+        bool[,] trees = new bool[width, height];
+
         for (int x = 0; x < width; x++) {
             for (int z = 0; z < height; z++) { // z is 2d y
                 float y = noiseMap[x, z] * heightMultiplier;
-                
-                if (prng.Next(100) < 4) { // 4 is 5% bc 0 math
+
+                if (!CheckIfTreeIsClose(trees, new Vector2(x, z), minTreeDistance))
+                {
+                   if (prng.Next(100) < 4) { // 4 is 5% bc 0 math
+                    trees[x, z] = true;
+
                     float spawnX = x + offset[0];
                     float spawnZ = z + offset[1];
 
@@ -77,9 +86,27 @@ public class TerrainGenerator : MonoBehaviour
                     Quaternion spawnRotation = Quaternion.Euler(-90, prng.Next(0,360), 0);
                     var tree = Instantiate(treePrefab, spawnPosition, spawnRotation);
                     tree.transform.parent = chunkParent;
-                } 
+                }  
+                }
             }
         }
+    }
+
+    private bool CheckIfTreeIsClose(bool[,] trees, Vector2 location, int distance)
+    {
+
+        for (int x = (int)location[0] - distance; x < (int)location[0] + distance; x++)
+        {
+            for (int z = (int)location[1] - distance; z < (int)location[1] + distance; z++)
+            {
+                if (x >= 0 && x < trees.GetLength(0) && z >= 0 && z < trees.GetLength(1))
+                {
+                    if (trees[x, z] == true) return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     void OnValidate()
