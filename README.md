@@ -38,11 +38,19 @@ They are all aligned but have a weird y axis spacing diffrence issue, hopefully 
 
 ### Saturday, January 10th | x hours
 
-#### 14:00 | x hours
+#### 14:00 | 1 hour
 
 Fixed the chunk spawning issue, now time to work on the function that will only spawn chunks x units close to you.
 
 Also might change this game from a survival game to a drone sim... Need to think about it a bit...
+
+#### 16:00 | x hours
+
+Got seams at edges of chunks fixed. Also fixed tree spawning and made it per chunk.
+
+Might want to change it so that it deletes each chunk when not near, not just disable. Idt disable does anything other than hide it.
+
+Now need to work on drone physics.
 
 ## Credits
 
