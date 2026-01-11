@@ -56,6 +56,8 @@ Now need to work on drone physics.
 
 Going to now make it so trees don't spawn too close, then work on drone physics.
 
+Done with tree spawning distance, now going to add a tree height offset, then work on drone stuff.
+
 ## Credits
 
 `"Low Poly Pine Tree" (https://skfb.ly/6WYVr) by skaljowsky is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).`
